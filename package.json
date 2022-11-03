@@ -1,0 +1,13 @@
+{
+  "name": "amq-song-downloader",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "compare.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "music-metadata": "^8.1.0"
+  }
+}
