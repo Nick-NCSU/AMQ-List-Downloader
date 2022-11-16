@@ -21,8 +21,16 @@ for(const newSong of newSongData) {
 writeFileSync('./data/songs.json', JSON.stringify(songData, null, 2));
 
 function checkUrls(urls, newUrls) {
-  return urls.catbox[0] === newUrls.catbox[0]
-    || urls.catbox[480] === newUrls.catbox[480]
-    || urls.catbox[720] === newUrls.catbox[720]
-    || urls.openingsmoe[720] === newUrls.openingsmoe[720];
+  if(!urls.catbox)
+    urls.catbox = {};
+  if(!urls.openingsmoe)
+    urls.openingsmoe = {};
+  if(!newUrls.catbox)
+    newUrls.catbox = {};
+  if(!newUrls.openingsmoe)
+    newUrls.openingsmoe = {};
+  return (urls.catbox[0] && urls.catbox[0] === newUrls.catbox[0])
+    || (urls.catbox[480] && urls.catbox[480] === newUrls.catbox[480])
+    || (urls.catbox[720] && urls.catbox[720] === newUrls.catbox[720])
+    || (urls.openingsmoe[720] && urls.openingsmoe[720] === newUrls.openingsmoe[720]);
 }
