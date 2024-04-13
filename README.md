@@ -17,6 +17,9 @@ npm i
 
 ## Run
 
-Run the `run.sh` file to download the songs. 
+Run the following command:
+```sh
+npm start
+```
 
 The downloaded songs will be in the `songs` folder.
