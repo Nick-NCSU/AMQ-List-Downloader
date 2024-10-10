@@ -11,9 +11,11 @@ npm i
 
 ### Add songs 
 
-1. Generate/Export Song List using [Song List UI](https://github.com/TheJoseph98/AMQ-Scripts#song-list-ui-amqsonglistuiuserjs)
+1. Generate/Export Song List using [the userscript](https://github.com/Nick-NCSU/AMQ-List-Downloader/raw/main/src/generator.js)
 
-2. Copy/paste exported list to `data/newsongs.json`
+2. Copy list from the `downloadSongList` entry in local storage
+
+3. Paste list into a new file `./data/songs.json`
 
 ## Run
 

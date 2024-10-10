@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from 'fs'
 import PQueue from 'p-queue';
 import Ffmpeg from 'fluent-ffmpeg';
+import { selectSeason } from './util';
 
 export async function downloadSongs() {
   const queue = new PQueue({
@@ -8,23 +9,26 @@ export async function downloadSongs() {
   });
   const remainingSongs = JSON.parse(readFileSync('./tmp/remaining.json'));
   for(const song of remainingSongs) {
-    const id = song.urls.catbox['0'] ?? song.urls.catbox['480'] ?? song.urls.catbox['720'];
-    const url = `https://nl.catbox.moe/${id}`;
-    queue.add(() => downloadSong(song, url, id.slice(0, id.lastIndexOf('.'))))
+    const id = song.fileName;
+    if(!id) continue;
+    const url = `https://ladist1.catbox.video/${id}`;
+    queue.add(() => downloadSong(song, url, song.amqSongId));
   }
   await queue.onIdle();
 }
 
-function downloadSong(song, url, id) {
+function downloadSong(song, url, id, attempt = 0) {
   return new Promise((resolve) => {
+    const anime = selectSeason(song);
     let download = Ffmpeg(url);
-    if(existsSync(`./art/${song.annId}.jpg`)) {
-      download = download.addOutputOptions('-i', `./art/${song.annId}.jpg`, '-map', '0:a:0', '-map', '1:0', '-c:a', 'libmp3lame', '-c:v', 'mjpeg', '-id3v2_version', '3')
+    if(existsSync(`./art/${anime.annId}.jpg`)) {
+      download = download.addOutputOptions('-i', `./art/${anime.annId}.jpg`, '-map', '0:a:0', '-map', '1:0', '-c:a', 'libmp3lame', '-c:v', 'mjpeg', '-id3v2_version', '3')
     }
     download
       .addOutputOption('-metadata', `Title=${song.name}`)
       .addOutputOption('-metadata', `Artist=${song.artist.replace(/\//g, '\\')}`)
-      .addOutputOption('-metadata', `Album=${song.anime.english}`)
+      .addOutputOption('-metadata', `Album=${anime.names.EN ?? anime.names.JA}`)
+      .addOutputOption('-map_chapters', '-1')
       .addOutputOption('-ab', '128k')
       .addOutputOption('-ar', '44100')
       .outputFormat('mp3')
@@ -32,9 +36,14 @@ function downloadSong(song, url, id) {
       .on('end', function() {
         resolve();
       })
-      .on('error', function(err) {
+      .on('error', function() {
+        if(attempt >= 5) {
+          console.log(`Failed to download ${url}`);
+          resolve();
+          return;
+        }
         console.log(`Retrying ${url}`)
-        downloadSong(song, url, id).then(() => resolve());
+        downloadSong(song, url, id, attempt + 1).then(() => resolve());
       })
   })
 }

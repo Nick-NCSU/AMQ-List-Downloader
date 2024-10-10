@@ -2,6 +2,7 @@ import { readFileSync, createWriteStream, readdirSync, writeFileSync, existsSync
 import { chunk } from 'lodash-es';
 import { parseStringPromise } from 'xml2js'
 import axios from 'axios';
+import { selectSeason } from './util';
 
 const BASE_API_URL = 'https://cdn.animenewsnetwork.com/encyclopedia/api.xml';
 
@@ -10,8 +11,8 @@ function sleep(ms) {
 }
 
 export async function downloadArt() {
-  const existingArt = readdirSync('./art').map(file => +file.split('.')[0]);
-  const annIds = [...new Set(JSON.parse(readFileSync('./data/songs.json', 'utf-8')).map(song => song.annId))].filter(id => !existingArt.includes(id));
+  const existingArt = readdirSync('./art').map(file => +file.replace('.jpg', ''));
+  const annIds = [...new Set(JSON.parse(readFileSync('./data/songs.json', 'utf-8')).map(song => selectSeason(song).annId))].filter(id => !existingArt.includes(id));
 
   for(const ids of chunk(annIds, 50)) {
     const output = await (await fetch(`${BASE_API_URL}?anime=${ids.join('/')}`)).text();
@@ -23,6 +24,8 @@ export async function downloadArt() {
         (acc, img) => (+img.$?.width * +img.$?.height) > (+acc.$?.width * +acc.$?.height) ? img : acc, { $: { width: 0, height: 0 } })?.$?.src;
       if(image) {
         await downloadImage(id, image)
+      } else {
+        console.log(`No image found for ${id}`);
       }
     }
     await sleep(2000);

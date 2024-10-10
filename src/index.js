@@ -1,7 +1,5 @@
 import { existsSync, mkdirSync, rmSync } from 'fs';
-import { combine } from './combinelists.js';
-import { findMissing } from './findmissing.js';
-import { compare } from './compare.js';
+import { findMissing } from './findMissing.js';
 import { downloadSongs } from './downloadSongs.js';
 import { downloadArt } from './downloadArt.js';
 
@@ -15,9 +13,7 @@ if(!existsSync('./songs')) {
 if(!existsSync('./art')) {
   mkdirSync('./art');
 }
-combine();
-await findMissing();
+findMissing();
 await downloadArt();
 await downloadSongs();
 rmSync('./tmp', { recursive: true, force: true });
-await compare();
