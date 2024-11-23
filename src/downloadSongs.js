@@ -1,17 +1,17 @@
 import { readFileSync, existsSync } from 'fs'
 import PQueue from 'p-queue';
 import Ffmpeg from 'fluent-ffmpeg';
-import { selectSeason } from './util';
+import { selectSeason } from './util.js';
 
 export async function downloadSongs() {
   const queue = new PQueue({
-    concurrency: 10
+    concurrency: 5
   });
-  const remainingSongs = JSON.parse(readFileSync('./tmp/remaining.json'));
+  const remainingSongs = Object.values(JSON.parse(readFileSync('./tmp/remaining.json')));
   for(const song of remainingSongs) {
     const id = song.fileName;
     if(!id) continue;
-    const url = `https://ladist1.catbox.video/${id}`;
+    const url = `https://naedist.animemusicquiz.com/${id}`;
     queue.add(() => downloadSong(song, url, song.amqSongId));
   }
   await queue.onIdle();

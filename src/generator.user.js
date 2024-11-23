@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         AMQ List Generator
 // @namespace    https://github.com/Nick-NCSU
-// @version      1.0
+// @version      1.1
 // @description  Generates a list of your anime and stores in the "downloadSongList" localstorage
 // @author       Nick-NCSU
 // @match        https://*.animemusicquiz.com/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
-// @downloadURL  https://github.com/Nick-NCSU/AMQ-List-Downloader/raw/main/src/generator.js
-// @updateURL    https://github.com/Nick-NCSU/AMQ-List-Downloader/raw/main/src/generator.js
+// @downloadURL  https://github.com/Nick-NCSU/AMQ-List-Downloader/raw/main/src/generator.user.js
+// @updateURL    https://github.com/Nick-NCSU/AMQ-List-Downloader/raw/main/src/generator.user.js
 // ==/UserScript==
 
 await setup();
