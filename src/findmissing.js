@@ -2,7 +2,16 @@ import { readdirSync, readFileSync, writeFileSync } from 'fs'
 import { selectSeason } from './util.js';
 
 export function findMissing() {
-  const songData = JSON.parse(readFileSync('./data/songs.json', 'utf-8'));
+  const songData = Object.values(JSON.parse(readFileSync('./data/songs.json', 'utf-8'))).reduce((acc, song) => {
+    acc[song.amqSongId] = {
+      ...song,
+      anime: {
+        ...acc[song.amqSongId]?.anime,
+        ...song.anime,
+      }
+    }
+    return acc;
+  }, {});
 
   const existingSongs = readdirSync('./songs').map(f => +f.replace('.mp3', ''));
 

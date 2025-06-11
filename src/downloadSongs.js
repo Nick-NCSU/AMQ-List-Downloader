@@ -28,6 +28,7 @@ function downloadSong(song, url, id, attempt = 0) {
       .addOutputOption('-metadata', `Title=${song.name}`)
       .addOutputOption('-metadata', `Artist=${song.artist.replace(/\//g, '\\')}`)
       .addOutputOption('-metadata', `Album=${anime.names.EN ?? anime.names.JA}`)
+      .addOutputOption('-metadata', `Album_Artist=Various`)
       .addOutputOption('-map_chapters', '-1')
       .addOutputOption('-ab', '128k')
       .addOutputOption('-ar', '44100')
