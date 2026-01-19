@@ -9,6 +9,12 @@ contents of the `./data/songs` folder after running.
 
 ## Setup
 
+## Prerequisites
+
+[Node](https://nodejs.org/) >= 15
+
+[FFmpeg](https://www.ffmpeg.org/)
+
 ### Installation
 
 Install npm packages
