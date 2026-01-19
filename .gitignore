@@ -1,5 +1,6 @@
 node_modules
-songs
-art
-remaining.json
-songs.json
+data/songs
+data/art
+data/songs.json
+data/anki.txt
+tmp
